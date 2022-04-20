@@ -75,3 +75,14 @@ The following example shows a local storage definition:
 
 The ruler looks for tenant rules in the `/tmp/rules/<TENANT ID>` directory.
 The ruler requires rule files to be in the [Prometheus format](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/#recording-rules).
+
+## Evaluate rules using query-frontend
+
+Despite including its own built-in querier, the ruler can be configured to delegate evaluation of rule expressions to the query-frontend.
+In this way, it is possible to leverage query optimization capabilities, such as [query sharding]({{< relref "../../query-sharding/index.md" >}}), to drastically reduce evaluation times.
+
+To enable query-frontend rule evaluation, set the `-ruler.query-frontend.address` CLI flag or its respective YAML configuration parameter for the ruler.
+
+Communication between ruler and query-frontend is established over gRPC, so if needed, we can make use of client-side load balancing by prefixing the address value with `dns://`.
+
+Also, there's a set of extra parameters (`-ruler.query-frontend.tls-*` or its respective YAML configuration options) that allows you to secure the connection when necessary.
